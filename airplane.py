@@ -1,10 +1,12 @@
-import requests
-from amadeus import Client, ResponseError
+import json
 
 class airplane:
 
     def __init__(self):
-        self.input = ""
+        self = ""
 
-    def parse(self):
-        #parse
+    def parse(self, param):
+        for i in range(len(param)):
+            if i<5:
+                print (param[i]['price'])
+        return self
