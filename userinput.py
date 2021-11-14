@@ -1,11 +1,12 @@
+
 class userinput:
 
     def __init__(self):
-        self.origin = 'SFO'
-        self.dest = 'JFK'
-        self.arr = '12-01-21'
-        self.ad = 1
-        
+        self.origin = 'MAD'
+        self.dest = 'BOS'
+        self.arr = '2021-12-31'
+        self.ad = 0
+
     def setOrigin(self, param):
         self.origin = param
 
@@ -18,25 +19,27 @@ class userinput:
     def setAdults(self, param):
         self.ad = param
 
-    def getOrigin(self):
-        return self.origin
+    def getOldParam(self):
+        params = {}
+        originIataCode = self.origin
+        destinationIataCode = self.dest
+        departureDate = self.arr
+        currencyCode = "USD"
 
-    def getDestination(self):
-        return self.dest
+        for var in ["originIataCode", "destinationIataCode", "departureDate", "currencyCode"]:
+            params[var] = eval(var)
 
-    def getArrivalDate(self):
-        return self.arr
+        return params
 
-    def getAdults(self):
-        return self.ad
-
-    def getParam(self):
+    def getCurParam(self):
         params = {}
         originLocationCode = self.origin
         destinationLocationCode = self.dest
         departureDate = self.arr
-        adults = self.ad
+        adults = 1
+        currencyCode = "USD"
 
-        for var in ["originLocationCode", "destinationLocationCode", "departureDate", "adults"]:
+        for var in ["originLocationCode", "destinationLocationCode", "departureDate", "adults", "currencyCode"]:
             params[var] = eval(var)
+
         return params
