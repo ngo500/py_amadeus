@@ -15,29 +15,89 @@ class main:
         input = userinput()
         parseAir = airplane()
 
-        inputInfo = []
-        for (x, y) in event.items():
-            inputInfo.append(str(y))
-
-        input.setOrigin(inputInfo[0])
-        input.setDestination(inputInfo[1])
-        input.setArrivalDate(inputInfo[2])
+        input.setOrigin(event.get('originIataCode'))
+        input.setDestination(event.get('destinationIataCode'))
+        input.setArrivalDate(event.get('departureDate'))
 
         try:
-            params = input.getOldParam()
-            response = amadeus.analytics.itinerary_price_metrics.get(**params)
-            olddata = parseAir.parseOld(response.data)
-
             params = input.getCurParam()
             response = amadeus.shopping.flight_offers_search.get(**params)
-            newdata = parseAir.parseCur(response.data)
+            currentPrice = parseAir.parseCur(response.data)
+            
+            input.adjustMonth()
+            params = input.getOldParam()
+            response = amadeus.analytics.itinerary_price_metrics.get(**params)
+            avg1MonthAgo = parseAir.parseAvg(response.data)
+            
+            input.adjustMonth()
+            params = input.getOldParam()
+            response = amadeus.analytics.itinerary_price_metrics.get(**params)
+            avg2MonthAgo = parseAir.parseAvg(response.data)
+            
+            input.adjustMonth()
+            params = input.getOldParam()
+            response = amadeus.analytics.itinerary_price_metrics.get(**params)
+            avg3MonthAgo = parseAir.parseAvg(response.data)
+            
+            input.adjustMonth()
+            params = input.getOldParam()
+            response = amadeus.analytics.itinerary_price_metrics.get(**params)
+            avg4MonthAgo = parseAir.parseAvg(response.data)
+            
+            input.adjustMonth()
+            params = input.getOldParam()
+            response = amadeus.analytics.itinerary_price_metrics.get(**params)
+            avg5MonthAgo = parseAir.parseAvg(response.data)
+            
+            input.setArrivalDate(event.get('departureDate'))
+            input.adjustYear()
+            params = input.getOldParam()
+            response = amadeus.analytics.itinerary_price_metrics.get(**params)
+            price1YearAgo = parseAir.parseOld(response.data)
+            
+            input.adjustMonth()
+            input.adjustDay()
+            params = input.getOldParam()
+            response = amadeus.analytics.itinerary_price_metrics.get(**params)
+            avg1year1MonthAgo = parseAir.parseOldAvg(response.data)
+            
+            input.adjustMonth()
+            params = input.getOldParam()
+            response = amadeus.analytics.itinerary_price_metrics.get(**params)
+            avg1year2MonthAgo = parseAir.parseOldAvg(response.data)
+            
+            input.adjustMonth()
+            params = input.getOldParam()
+            response = amadeus.analytics.itinerary_price_metrics.get(**params)
+            avg1year3MonthAgo = parseAir.parseOldAvg(response.data)
+            
+            input.adjustMonth()
+            params = input.getOldParam()
+            response = amadeus.analytics.itinerary_price_metrics.get(**params)
+            avg1year4MonthAgo = parseAir.parseOldAvg(response.data)
+            
+            input.adjustMonth()
+            params = input.getOldParam()
+            response = amadeus.analytics.itinerary_price_metrics.get(**params)
+            avg1year5MonthAgo = parseAir.parseOldAvg(response.data)
+            
             
             data = {
-                "oldValue": olddata,
-                "newValue": newdata
+                "currentPrice": currentPrice,
+                "avg1MonthAgo": avg1MonthAgo,
+                "avg2MonthAgo": avg2MonthAgo,
+                "avg3MonthAgo": avg3MonthAgo,
+                "avg4MonthAgo": avg4MonthAgo,
+                "avg5MonthAgo": avg5MonthAgo,
+                "price1YearAgo": price1YearAgo,
+                "avg1year1MonthAgo": avg1year1MonthAgo,
+                "avg1year2MonthAgo": avg1year2MonthAgo,
+                "avg1year3MonthAgo": avg1year3MonthAgo,
+                "avg1year4MonthAgo": avg1year4MonthAgo,
+                "avg1year5MonthAgo": avg1year5MonthAgo,
             }
+            
             return data
 
         except ResponseError as error:
-            print("error! ")
-            print (error)
+            return (error)
