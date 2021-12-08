@@ -1,30 +1,121 @@
-import json
+import datetime
 
-class airplane:
+class userinput:
 
     def __init__(self):
-        self = ""
+        self.origin = 'MAD'
+        self.dest = 'BOS'
+        self.arr = '2021-12-31'
+        self.ad = 0
+        self.today = datetime.datetime.now()
 
-    def parseCur(self, param):
-        data = ""
-        for i in range(len(param)):
-            if i<1:
-                data = (param[i]['price']['grandTotal'])
-        return data
+    def setOrigin(self, param):
+        self.origin = param
 
-    def parseOld(self, param):
-        data = ""
-        data = param[0]['priceMetrics'][0]['amount']
-        return data
-    
-    def parseOldAvg(self, param):
-        data = ""
-        data = param[0]['priceMetrics'][0]['amount']
-        return data
+    def setDestination(self, param):
+        self.dest = param
+
+    def setArrivalDate(self, param):
+        self.arr = param
+
+    def setAdults(self, param):
+        self.ad = param
         
-    def parseAvg(self, param):
-        data = ""
-        tempdata = param[0]['priceMetrics'][1]['amount']
-        tempans = (float(tempdata)/7)
-        data = str('{0:.2f}'.format(tempans))
-        return data
+    def getDate(self):
+        temp = self.arr
+        tempdate = temp.split("-")
+        alt = datetime.datetime(int(tempdate[0]), int(tempdate[1]), int(tempdate[2]))
+        return alt
+    
+    def getToday(self):
+        return self.today
+    
+    def adjustYear(self):
+        date = self.arr
+        tempyear = date.split("-")
+        date = ""
+        temp = int(tempyear[0][3])
+    
+        if(temp == 0):
+            temp2 = int(tempyear[0][2])
+            temp2 -= 1
+            date = tempyear[0][0] + tempyear[0][1] + str(temp2) + '9' + '-' + tempyear[1] + '-' + tempyear[2]
+        else:
+            temp -= 1
+            date = tempyear[0][0] + tempyear[0][1] + tempyear[0][2] + str(temp) + '-' + tempyear[1] + '-' + tempyear[2]
+    
+        self.arr = date
+        
+    def adjustMonth(self):
+        date = self.arr
+        tempmonth = date.split("-")
+        date = ""
+        temp = tempmonth[1]
+        
+        if(temp == '01'):
+            temp = int(tempmonth[0])
+            temp -= 1
+            tempmonth[0] = str(temp)
+            date = tempmonth[0] + '-' + '12' + '-' + tempmonth[2]
+        elif(temp == '02'):
+            date = tempmonth[0] + '-' + '01' + '-' + tempmonth[2]
+        elif(temp == '03'):
+            date = tempmonth[0] + '-' + '02' + '-' + tempmonth[2]
+        elif(temp == '04'):
+            date = tempmonth[0] + '-' + '03' + '-' + tempmonth[2]
+        elif(temp == '05'):
+            date = tempmonth[0] + '-' + '04' + '-' + tempmonth[2]
+        elif(temp == '06'):
+            date = tempmonth[0] + '-' + '05' + '-' + tempmonth[2]
+        elif(temp == '07'):
+            date = tempmonth[0] + '-' + '06' + '-' + tempmonth[2]
+        elif(temp == '08'):
+            date = tempmonth[0] + '-' + '07' + '-' + tempmonth[2]
+        elif(temp == '09'):
+            date = tempmonth[0] + '-' + '08' + '-' + tempmonth[2]
+        elif(temp == '10'):
+            date = tempmonth[0] + '-' + '09' + '-' + tempmonth[2]
+        elif(temp == '11'):
+            date = tempmonth[0] + '-' + '10' + '-' + tempmonth[2]
+        elif(temp == '12'):
+            date = tempmonth[0] + '-' + '11' + '-' + tempmonth[2]
+        else:
+            date = "error"
+        
+        self.arr = date
+        
+    def adjustDay(self):
+        date = self.arr
+        tempday = date.split("-")
+        date = ""
+        if(tempday[2] == '01'):
+            date = tempday[0] + '-' + tempday[1] + '-' + '02'
+        else:
+            date = tempday[0] + '-' + tempday[1] + '-' + '01'
+            
+        self.arr = date
+
+    def getOldParam(self):
+        params = {}
+        originIataCode = self.origin
+        destinationIataCode = self.dest
+        departureDate = self.arr
+        currencyCode = "USD"
+
+        for var in ["originIataCode", "destinationIataCode", "departureDate", "currencyCode"]:
+            params[var] = eval(var)
+
+        return params
+
+    def getCurParam(self):
+        params = {}
+        originLocationCode = self.origin
+        destinationLocationCode = self.dest
+        departureDate = self.arr
+        adults = 1
+        currencyCode = "USD"
+
+        for var in ["originLocationCode", "destinationLocationCode", "departureDate", "adults", "currencyCode"]:
+            params[var] = eval(var)
+
+        return params
