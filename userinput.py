@@ -1,3 +1,4 @@
+import datetime
 
 class userinput:
 
@@ -6,6 +7,7 @@ class userinput:
         self.dest = 'BOS'
         self.arr = '2021-12-31'
         self.ad = 0
+        self.today = datetime.datetime.now()
 
     def setOrigin(self, param):
         self.origin = param
@@ -19,6 +21,15 @@ class userinput:
     def setAdults(self, param):
         self.ad = param
         
+    def getDate(self):
+        temp = self.arr
+        tempdate = temp.split("-")
+        alt = datetime.datetime(int(tempdate[0]), int(tempdate[1]), int(tempdate[2]))
+        return alt
+    
+    def getToday(self):
+        return self.today
+    
     def adjustYear(self):
         date = self.arr
         tempyear = date.split("-")
@@ -42,6 +53,9 @@ class userinput:
         temp = tempmonth[1]
         
         if(temp == '01'):
+            temp = int(tempmonth[0])
+            temp -= 1
+            tempmonth[0] = str(temp)
             date = tempmonth[0] + '-' + '12' + '-' + tempmonth[2]
         elif(temp == '02'):
             date = tempmonth[0] + '-' + '01' + '-' + tempmonth[2]
